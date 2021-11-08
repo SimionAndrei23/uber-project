@@ -11,4 +11,10 @@
   .clipPath {
     clip-path: circle(80% at 50% 280%);
   }
+
+  .clipPath2 {
+
+    clip-path: polygon(0 0, 0% 100%, 100% 100%);
+
+  }
 }

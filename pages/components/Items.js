@@ -1,16 +1,39 @@
-import React from 'react'
+import { useEffect, useState} from 'react'
 import tw from "tailwind-styled-components"
 import Link from 'next/Link'
+import { auth } from '../../firebase'
+import { onAuthStateChanged, signOut } from "firebase/auth";
+import { useRouter } from 'next/router'
 
 const Items = () => {
+
+    const [user, setUser] = useState(null)
+
+    const router = useRouter()
+
+    useEffect(() => {
+        return onAuthStateChanged(auth, (user) => {
+            if(user) {
+                setUser({
+                    name: user.displayName,
+                    photo: user.photoURL,
+                })
+              }
+              else {
+                  setUser(null)
+                  router.push('/login')
+              }
+        })
+    },[])
+
     return (
         <ItemsContainer>
             <ContainerUnder></ContainerUnder>
             <Header>
                 <UberLogo src = 'https://download.logo.wine/logo/Uber/Uber-Logo.wine.png' />
                 <Profile>
-                    <Name> Simion Andrei </Name>
-                    <UserImage src = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSLagm-E7K3VGEjxOnew7KTuKEE9oH3s0yC7g&usqp=CAU' />
+                    <Name> { user && user.name} </Name>
+                    <UserImage onClick = { () => signOut(auth)} src = { user && user.photo} />
                 </Profile>
             </Header>
             <ActionButtons>

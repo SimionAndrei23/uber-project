@@ -1,19 +1,17 @@
 
+import { useState, useMemo, useEffect } from 'react'
 import tw from "tailwind-styled-components"
-import Lottie from 'react-lottie';
-import animationData from '../public/car.json'
 import Router from 'next/router'
+import Link from 'next/link'
+import Select from 'react-select'
+import countryList from 'react-select-country-list'
+import Map from './components/Map'
 
 const search = () => {
 
-    const defaultOptions = {
-        loop: true,
-        autoplay: true,
-        animationData: animationData,
-        rendererSettings: {
-          preserveAspectRatio: "xMidYMid slice"
-        }
-      };
+    const [inputPickUP, setInputPickUP] = useState('')
+
+    const [inputDropOFF, setInputDropOFF] = useState('')
 
     return (
         <Wrapper>
@@ -27,8 +25,8 @@ const search = () => {
                     <Square src = 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1e/U%2B25A0.svg/1200px-U%2B25A0.svg.png' />
                </FromToIcons>
                 <InputForm>
-                    <Input placeholder = 'Pick a location...' />
-                    <Input placeholder = 'Where to...' />
+                    <Input value = {inputPickUP} onChange = {(e) => setInputPickUP(e.target.value)} placeholder = 'Pick a location...' />
+                    <Input value = {inputDropOFF} onChange = {(e) => setInputDropOFF(e.target.value)} placeholder = 'Where to...' />
                 </InputForm>
                 <Plus src = 'https://www.freepnglogos.com/uploads/plus-icon/plus-icon-plus-math-icon-download-icons-9.png' />
             </InputContainer>
@@ -37,30 +35,42 @@ const search = () => {
                 Saved Places
             </ButtonPlaces>
             <ButtonConfirm>
-                <Button>
-                    Confirm Locations
-                </Button>
+                <Link href = {{
+                    pathname: '/confirm',
+                    query: {
+                        pickup: inputPickUP,
+                        dropoff: inputDropOFF,
+                    }
+                }}>    
+                    <Button disabled = {!inputPickUP || !inputDropOFF}>
+                        Confirm Locations
+                    </Button>
+                </Link>
             </ButtonConfirm>
             <ButtonConfirm>
                 <UberLogo src = 'https://i.ibb.co/VQwGSCC/uber-removebg-preview.png' />
             </ButtonConfirm>
-            <LottieContainer>
-            <Lottie 
-	            options={defaultOptions}
-                width = {400}
-                height = {430} 
-            />
-            </LottieContainer>
+            <ImageContainer>
+                <CarImage src = 'https://i.ibb.co/BqBB4zr/uber-car.png' />
+            </ImageContainer>
         </Wrapper>
     )
 }
 
 const Wrapper = tw.div`
-    bg-gray-200 min-h-screen
+    flex flex-col bg-gray-200 min-h-screen overflow-hidden
+`
+
+const MapWrapper = tw.div`
+    hidden
 `
 
 const ButtonContainer = tw.div`
-    bg-white 
+    bg-white flex px-4 items-center justify-between
+`
+
+const CountryWrapper = tw.div`
+    w-36
 `
 
 const BackButton = tw.img`
@@ -117,12 +127,17 @@ const Star = tw.img`
     bg-gray-300 p-2 rounded-full w-10 h-10 object-cover
 `
 
-const LottieContainer = tw.div`
-    mb-20
-`
-
 const UberLogo = tw.img`
     w-20 h-20 object-cover
+`
+
+const ImageContainer = tw.div`
+    flex flex-1 items-center justify-center mt-4
+`
+
+
+const CarImage = tw.img`
+     w-auto h-auto md:h-52 object-cover shadow-2xl mb-10
 `
 
 export default search
