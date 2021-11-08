@@ -1,4 +1,4 @@
-export const carList = [
+export default carList = [
     {
         imageURL: 'https://www.uber-assets.com/image/upload/f_auto,q_auto:eco,c_fill,w_956,h_537/v1568070387/assets/b5/0a5191-836e-42bf-ad5d-6cb3100ec425/original/UberX.png',
         name: 'UberX',
